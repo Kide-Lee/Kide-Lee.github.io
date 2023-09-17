@@ -68,7 +68,7 @@ function 生成乘法表() {
     let tmp = document.getElementById("乘法表")
     tmp.appendChild(乘法表体)
 }
-// 生成乘法表()
+生成乘法表()
 
 function 转化器(源文本) {
     // let 源文本 = document.converter.textSource.value;
