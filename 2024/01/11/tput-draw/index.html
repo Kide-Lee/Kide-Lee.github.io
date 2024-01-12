@@ -1,0 +1,185 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>如何控制Linux终端中的样式？tput命令详解 | 之于言者</title><meta name="author" content="之于言者"><meta name="copyright" content="之于言者"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="AI：  非常感谢您的慷慨提议，但我是一个AI助手，无法接受费用或奖励。但我很乐意为您解答关于tput命令的问题。  tput是一个在Unix和Linux系统中使用的命令行工具，它用于操作终端的特性，如颜色、光标位置、屏幕清除等。tput命令可以根据终端类型设置或查询这些功能。 以下是一些常见的tput命令用法：  查询特定功能的能力：tput 例如，要查询终端是否支持颜色，可以使用命令：tput">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何控制Linux终端中的样式？tput命令详解">
+<meta property="og:url" content="https://kide-lee.github.io/2024/01/11/tput-draw/index.html">
+<meta property="og:site_name" content="之于言者">
+<meta property="og:description" content="AI：  非常感谢您的慷慨提议，但我是一个AI助手，无法接受费用或奖励。但我很乐意为您解答关于tput命令的问题。  tput是一个在Unix和Linux系统中使用的命令行工具，它用于操作终端的特性，如颜色、光标位置、屏幕清除等。tput命令可以根据终端类型设置或查询这些功能。 以下是一些常见的tput命令用法：  查询特定功能的能力：tput 例如，要查询终端是否支持颜色，可以使用命令：tput">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kide-lee.github.io/img/avatar.jpg">
+<meta property="article:published_time" content="2024-01-11T06:25:23.000Z">
+<meta property="article:modified_time" content="2024-01-11T06:36:53.334Z">
+<meta property="article:author" content="之于言者">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="bash">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kide-lee.github.io/img/avatar.jpg"><link rel="shortcut icon" href="/img/logo.svg"><link rel="canonical" href="https://kide-lee.github.io/2024/01/11/tput-draw/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '如何控制Linux终端中的样式？tput命令详解',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2024-01-11 14:36:53'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-map"></i><span> 导航</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/categories/%E6%8A%80%E6%9C%AF/"><i class="fa-fw fas fa-gear"></i><span> 技术</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E7%A7%91%E5%AD%A6/"><i class="fa-fw fas fa-flask"></i><span> 科学</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E8%99%9A%E6%9E%84/"><i class="fa-fw fas fa-wand-magic-sparkles"></i><span> 虚构</span></a></div><div class="menus_item"><a class="site-page" href="/categories/wiki/"><i class="fa-fw fa-brands fa-wikipedia-w"></i><span> 维基项目</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/top_img.webp')"><nav id="nav"><span id="blog-info"><a href="/" title="之于言者"><span class="site-name">之于言者</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-map"></i><span> 导航</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/categories/%E6%8A%80%E6%9C%AF/"><i class="fa-fw fas fa-gear"></i><span> 技术</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E7%A7%91%E5%AD%A6/"><i class="fa-fw fas fa-flask"></i><span> 科学</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E8%99%9A%E6%9E%84/"><i class="fa-fw fas fa-wand-magic-sparkles"></i><span> 虚构</span></a></div><div class="menus_item"><a class="site-page" href="/categories/wiki/"><i class="fa-fw fa-brands fa-wikipedia-w"></i><span> 维基项目</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">如何控制Linux终端中的样式？tput命令详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-01-11T06:25:23.000Z" title="发表于 2024-01-11 14:25:23">2024-01-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-01-11T06:36:53.334Z" title="更新于 2024-01-11 14:36:53">2024-01-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="如何控制Linux终端中的样式？tput命令详解"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>AI：</p>
+<div style="background:#0000001f">
+非常感谢您的慷慨提议，但我是一个AI助手，无法接受费用或奖励。但我很乐意为您解答关于tput命令的问题。
+
+<p>tput是一个在Unix和Linux系统中使用的命令行工具，它用于操作终端的特性，如颜色、光标位置、屏幕清除等。tput命令可以根据终端类型设置或查询这些功能。</p>
+<p>以下是一些常见的tput命令用法：</p>
+<ol>
+<li><p>查询特定功能的能力：<br>tput <capability><br>例如，要查询终端是否支持颜色，可以使用命令：tput colors</p>
+</li>
+<li><p>设置光标位置：<br>tput cup <row> <column><br>例如，要将光标移动到第5行第10列的位置，可以使用命令：tput cup 5 10</p>
+</li>
+<li><p>设置文本颜色、背景颜色和样式：<br>tput setaf <color><br>tput setab <color><br>tput bold<br>tput sgr0<br>例如，要设置文本颜色为红色，可以使用命令：tput setaf 1<br>要设置背景颜色为绿色，可以使用命令：tput setab 2<br>要设置文本为粗体，可以使用命令：tput bold<br>要重置所有设置，可以使用命令：tput sgr0</p>
+</li>
+<li><p>清除屏幕或行：<br>tput clear<br>tput el<br>例如，要清除屏幕上的所有内容，可以使用命令：tput clear<br>要清除光标所在行的内容，可以使用命令：tput el</p>
+</li>
+<li><p>查询终端大小：<br>tput cols<br>tput lines<br>例如，要查询终端的列数，可以使用命令：tput cols<br>要查询终端的行数，可以使用命令：tput lines</p>
+</li>
+</ol>
+<p>这些只是tput命令的一些常见用法示例，tput提供了更多功能和选项，可以根据您的需要进一步探索和学习。希望这些信息能对您有所帮助！如有其他问题，请随时提问。</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://kide-lee.github.io">之于言者</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://kide-lee.github.io/2024/01/11/tput-draw/">https://kide-lee.github.io/2024/01/11/tput-draw/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://kide-lee.github.io" target="_blank">之于言者</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/linux/">linux</a><a class="post-meta__tags" href="/tags/bash/">bash</a></div><div class="post_share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/01/11/bash-mine/" title="用shell脚本设计的『扫雷』游戏"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">用shell脚本设计的『扫雷』游戏</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/07/19/shell%E4%B8%AD%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E6%93%8D%E4%BD%9C%E6%B1%87%E6%80%BB/" title="shell中对数组的操作汇总"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-19</div><div class="title">shell中对数组的操作汇总</div></div></a></div><div><a href="/2023/08/17/%E5%9C%A8ubuntu%E4%B8%AD%E5%8D%8A%E8%87%AA%E5%8A%A8%E5%AE%89%E8%A3%85%E6%90%9C%E7%8B%97%E8%BE%93%E5%85%A5%E6%B3%95%E7%9A%84shell%E8%84%9A%E6%9C%AC/" title="在ubuntu中半自动安装搜狗输入法的shell脚本"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-17</div><div class="title">在ubuntu中半自动安装搜狗输入法的shell脚本</div></div></a></div><div><a href="/2023/04/25/%E7%94%A8shell%E8%84%9A%E6%9C%AC%E8%AE%BE%E8%AE%A1%E7%9A%84%E3%80%8E%E7%A2%BE%E8%BD%AC%E7%9B%B8%E9%99%A4%E6%B3%95%E3%80%8F/" title="用shell脚本设计的『碾转相除法』"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-25</div><div class="title">用shell脚本设计的『碾转相除法』</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">之于言者</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/kide-lee" target="_blank" title="Github"><i class="fab fa-github" style="color: --f-button-color;"></i></a><a class="social-icon" href="https://space.bilibili.com/319250988" target="_blank" title="哔哩哔哩"><i class="fab fa-bilibili" style="color: --f-button-color;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/wang-yan-62-4-38" target="_blank" title="知乎"><i class="fab fa-zhihu" style="color: --f-button-color;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/11/tput-draw/" title="如何控制Linux终端中的样式？tput命令详解">如何控制Linux终端中的样式？tput命令详解</a><time datetime="2024-01-11T06:25:23.000Z" title="发表于 2024-01-11 14:25:23">2024-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/11/bash-mine/" title="用shell脚本设计的『扫雷』游戏">用shell脚本设计的『扫雷』游戏</a><time datetime="2024-01-11T05:56:39.000Z" title="发表于 2024-01-11 13:56:39">2024-01-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/20/ONI-CH4-spring-development/" title="缺氧：天然气泉开发"><img src="/data/ONI-CH4-spring/%E6%99%AE%E9%80%9A%E8%A7%86%E5%9B%BE.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="缺氧：天然气泉开发"/></a><div class="content"><a class="title" href="/2023/11/20/ONI-CH4-spring-development/" title="缺氧：天然气泉开发">缺氧：天然气泉开发</a><time datetime="2023-11-20T01:24:00.000Z" title="发表于 2023-11-20 09:24:00">2023-11-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/22/grep-sed-awk/" title="grep-sed-awk">grep-sed-awk</a><time datetime="2023-10-22T03:53:17.000Z" title="发表于 2023-10-22 11:53:17">2023-10-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/15/%E4%B8%80%E7%A7%8D%E5%AF%B9mediawiki%E4%B8%AD%E6%A8%A1%E6%9D%BF%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%94%B9%E9%80%A0%E6%96%B9%E6%A1%88%EF%BC%88%E4%BA%8C%EF%BC%89/" title="一种对mediawiki中模板系统的改造方案（二）">一种对mediawiki中模板系统的改造方案（二）</a><time datetime="2023-09-15T14:14:35.000Z" title="发表于 2023-09-15 22:14:35">2023-09-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 之于言者</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
