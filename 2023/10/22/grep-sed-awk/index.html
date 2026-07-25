@@ -1,0 +1,416 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>grep-sed-awk | 之于言者</title><meta name="author" content="之于言者"><meta name="copyright" content="之于言者"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="总而言之grep、sed 与 awk 是 linux 各大发行版中经常预置的三种文本处理工具。因其常见，往往被业内称为 linux 的“三剑客”。它们的共同点在于他们都是命令式而非交互式的，这与我们常用的 vim 或 nano 不同，同时也加大了学习成本；但也正因如此，它们都很适合嵌入到脚本之中，自动化完成文本处理任务。 关于 grepgrep 可以搜索文本文件中包含关键字的行，其配合正则表达式可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="grep-sed-awk">
+<meta property="og:url" content="https://kide-lee.github.io/2023/10/22/grep-sed-awk/index.html">
+<meta property="og:site_name" content="之于言者">
+<meta property="og:description" content="总而言之grep、sed 与 awk 是 linux 各大发行版中经常预置的三种文本处理工具。因其常见，往往被业内称为 linux 的“三剑客”。它们的共同点在于他们都是命令式而非交互式的，这与我们常用的 vim 或 nano 不同，同时也加大了学习成本；但也正因如此，它们都很适合嵌入到脚本之中，自动化完成文本处理任务。 关于 grepgrep 可以搜索文本文件中包含关键字的行，其配合正则表达式可">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kide-lee.github.io/img/logo.svg">
+<meta property="article:published_time" content="2023-10-21T19:53:17.000Z">
+<meta property="article:modified_time" content="2023-10-21T16:22:00.000Z">
+<meta property="article:author" content="之于言者">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kide-lee.github.io/img/logo.svg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "grep-sed-awk",
+  "url": "https://kide-lee.github.io/2023/10/22/grep-sed-awk/",
+  "image": "https://kide-lee.github.io/img/logo.svg",
+  "datePublished": "2023-10-21T19:53:17.000Z",
+  "dateModified": "2023-10-21T16:22:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "之于言者",
+      "url": "https://kide-lee.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/logo.svg"><link rel="canonical" href="https://kide-lee.github.io/2023/10/22/grep-sed-awk/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.6.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'grep-sed-awk',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/logo.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%8A%80%E6%9C%AF/"><i class="fa-fw fas fa-code"></i><span> 技术</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%B8%B8%E6%88%8F/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E7%A7%91%E5%AD%A6/"><i class="fa-fw fas fa-flask"></i><span> 科学</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E8%99%9A%E6%9E%84/"><i class="fa-fw fas fa-book"></i><span> 虚构</span></a></div><div class="menus_item"><a class="site-page" href="/categories/wiki/"><i class="fa-fw fab fa-wikipedia-w"></i><span> 维基项目</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/top_img.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/logo.svg" alt="Logo"><span class="site-name">之于言者</span></a><a class="nav-page-title" href="/"><span class="site-name">grep-sed-awk</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%8A%80%E6%9C%AF/"><i class="fa-fw fas fa-code"></i><span> 技术</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%B8%B8%E6%88%8F/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E7%A7%91%E5%AD%A6/"><i class="fa-fw fas fa-flask"></i><span> 科学</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E8%99%9A%E6%9E%84/"><i class="fa-fw fas fa-book"></i><span> 虚构</span></a></div><div class="menus_item"><a class="site-page" href="/categories/wiki/"><i class="fa-fw fab fa-wikipedia-w"></i><span> 维基项目</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">grep-sed-awk</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-21T19:53:17.000Z" title="发表于 2023-10-22 03:53:17">2023-10-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-21T16:22:00.000Z" title="更新于 2023-10-22 00:22:00">2023-10-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="总而言之"><a href="#总而言之" class="headerlink" title="总而言之"></a>总而言之</h2><p>grep、sed 与 awk 是 linux 各大发行版中经常预置的三种文本处理工具。因其常见，往往被业内称为 linux 的“三剑客”。它们的共同点在于他们都是命令式而非交互式的，这与我们常用的 vim 或 nano 不同，同时也加大了学习成本；但也正因如此，它们都很适合嵌入到脚本之中，自动化完成文本处理任务。</p>
+<h2 id="关于-grep"><a href="#关于-grep" class="headerlink" title="关于 grep"></a>关于 grep</h2><p>grep 可以搜索文本文件中包含关键字的行，其配合<strong>正则表达式</strong>可以实现更强大的功能。一般来说，grep 命令是这样构成的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">&quot;[关键字]&quot;</span> [文件路径]</span><br></pre></td></tr></table></figure>
+
+
+<p>特别的，我们也时常将其他命令的输出结果重定向给 grep 命令，再进行筛选。类似这样：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[命令] | grep <span class="string">&quot;[关键字]&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+<p>而 grep 的所谓“关键字”是支持正则表达式的，使用“-E”参数能获得更强的正则表达式支持。grep 命令的常见参数如下：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>全称</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-E</td>
+<td>–extended-regexp</td>
+<td>使用扩展的正则表达式规则</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>–file&#x3D;[文件]</td>
+<td>从文件中读取要使用的正则表达式</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>–ignore-case</td>
+<td>忽略大小写</td>
+</tr>
+<tr>
+<td>-w</td>
+<td>–word-regexp</td>
+<td>仅匹配的（被空格包裹的）词</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>–line-regexp</td>
+<td>仅匹配的行</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>–invert-match</td>
+<td>反选</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>–line-number</td>
+<td>显示行号</td>
+</tr>
+<tr>
+<td>-C</td>
+<td>–context&#x3D;[数字]</td>
+<td>打印指定行数的上下文</td>
+</tr>
+</tbody></table>
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><p>搜索 长恨歌.md 中含“马嵬坡”的行及其上下文：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -C 2 <span class="string">&quot;马嵬坡&quot;</span> ChanghenGe.md</span><br></pre></td></tr></table></figure>
+
+
+<p>输出：</p>
+<blockquote>
+<p>峨嵋山下少人行，旌旗无光日色薄。蜀江水碧蜀山青，圣主朝朝暮暮情。行宫见月伤心色，夜雨闻铃肠断声。天旋地转回龙驭，到此踌躇不能去。<strong>马嵬坡</strong>下泥土中，不见玉颜空死处。君臣相顾尽沾衣，东望都门信马归。归来池苑皆依旧，太液芙蓉未央柳。芙蓉如面柳如眉，对此如何不泪垂。春风桃李花开日，秋雨梧桐叶落时。西宫南内多秋草，落叶满阶红不扫。</p>
+</blockquote>
+<p>搜索根目录中含 bin 的文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -lhrt / | grep <span class="string">&quot;bin&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+<p>输出：</p>
+<blockquote>
+<p>lrwxrwxrwx   1 root root    7  5月  2  2023 <strong>bin</strong> -&gt; usr&#x2F;<strong>bin</strong>lrwxrwxrwx   1 root root    8  5月  2  2023 s<strong>bin</strong> -&gt; usr&#x2F;s<strong>bin</strong></p>
+</blockquote>
+<p>搜索 长恨歌.md 中含数字的行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -E <span class="string">&quot;[一二三四五六七八九十百千万]&quot;</span> ChangHenGe.md</span><br></pre></td></tr></table></figure>
+
+
+<p>输出：</p>
+<blockquote>
+<p>天生丽质难自弃，<strong>一</strong>朝选在君王侧。回眸<strong>一</strong>笑百媚生，<strong>六</strong>宫粉黛无颜色。承欢侍宴无闲暇，春从春游夜专夜。后宫佳丽<strong>三千</strong>人，<strong>三千</strong>宠爱在<strong>一</strong>身。<strong>九</strong>重城阙烟尘生，<strong>千</strong>乘<strong>万</strong>骑西南行。翠华摇摇行复止，西出都门<strong>百</strong>余里。<strong>六</strong>军不发无奈何，宛转蛾眉马前死。花钿委地无人收，翠翘金雀玉搔头。楼阁玲珑<strong>五</strong>云起，其中绰约多仙子。中有<strong>一</strong>人字太真，雪肤花貌参差是。金阙西厢叩玉扃，转教小玉报双成。闻道汉家天子使，<strong>九</strong>华帐里梦魂惊。风吹仙袂飘飖举，犹似霓裳羽衣舞。玉容寂寞泪阑干，梨花<strong>一</strong>枝春带雨。含情凝睇谢君王，<strong>一</strong>别音容两渺茫。昭阳殿里恩爱绝，蓬莱宫中日月长。钗留<strong>一</strong>股合<strong>一</strong>扇，钗擘黄金合分钿。但教心似金钿坚，天上人间会相见。临别殷勤重寄词，词中有誓两心知。<strong>七</strong>月<strong>七</strong>日长生殿，夜半无人私语时。</p>
+</blockquote>
+<h2 id="关于-sed"><a href="#关于-sed" class="headerlink" title="关于 sed"></a>关于 sed</h2><p>sed 可以通过一句简单的脚本来处理文本文件，一般来说 sed 命令是这样构成的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed [参数] [脚本] [文件]</span><br></pre></td></tr></table></figure>
+
+
+<p>不加 -i 参数的话，命令会将处理后的文件输出到屏幕上，而不会改动原始文件。</p>
+<p>脚本大致是由“[行号][动作][新内容]”组成的，其中省略行号将使[动作]全局生效。比如 <code>sed -e &#39;1i\ABCD&#39; test.txt</code> 表示在 test.txt 的首行之前插一句“ABCD”。</p>
+<p>sed命令中的参数与动作的说明如下：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>动作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-e</td>
+<td>expression，指定要执行的脚本</td>
+<td>i</td>
+<td>insert，在指定的行之前插入内容</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>file，指定要执行的脚本文件</td>
+<td>a</td>
+<td>append，在指定的行之后插入内容</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>silent，仅显示经过处理的行</td>
+<td>d</td>
+<td>delete，删除指定行</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>in-placd，将处理后的文件覆盖到原始文件上</td>
+<td>c</td>
+<td>copy，取代指定行</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>s</td>
+<td>substitute，局部替换内容</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>p</td>
+<td>print，打印指定行，通常和-n连用</td>
+</tr>
+</tbody></table>
+<h3 id="案例-1"><a href="#案例-1" class="headerlink" title="案例"></a>案例</h3><p>输出 长恨歌.md 的前四行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -n -e &amp;#x27;1,4p&amp;#x27; ChangHenGe.md</span><br></pre></td></tr></table></figure>
+
+
+<p>输出:</p>
+<blockquote>
+<h3 id="长恨歌-【唐代】白居易汉皇重色思倾国，御宇多年求不得。杨家有女初长成，养在深闺人未识。天生丽质难自弃，一朝选在君王侧。回眸一笑百媚生，六宫粉黛无颜色。"><a href="#长恨歌-【唐代】白居易汉皇重色思倾国，御宇多年求不得。杨家有女初长成，养在深闺人未识。天生丽质难自弃，一朝选在君王侧。回眸一笑百媚生，六宫粉黛无颜色。" class="headerlink" title="长恨歌&gt; 【唐代】白居易汉皇重色思倾国，御宇多年求不得。杨家有女初长成，养在深闺人未识。天生丽质难自弃，一朝选在君王侧。回眸一笑百媚生，六宫粉黛无颜色。"></a>长恨歌&gt; 【唐代】白居易汉皇重色思倾国，御宇多年求不得。杨家有女初长成，养在深闺人未识。天生丽质难自弃，一朝选在君王侧。回眸一笑百媚生，六宫粉黛无颜色。</h3></blockquote>
+<p>将 长恨歌.md 中的所有的“一”替换成“壹”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -e &amp;#x27;s/一/壹/g&amp;#x27; ChangHenGe.md</span><br></pre></td></tr></table></figure>
+
+
+<p>输出略。</p>
+<h2 id="关于-awk"><a href="#关于-awk" class="headerlink" title="关于 awk"></a>关于 awk</h2><p>awk是一款用以格式化处理文本文件的编辑器，它也是通过一些简单的脚本处理文本文件的。所不同的是，它将每行文本（或记录，record）按指定分割符分割（默认是空格），并将其赋给一系列变量（或字段，field），比如$1代表这条记录的第一个字段，$2代表第二个；依次类推；特别的，$0代表所有的字段，$NF代表最后一个字段，$NF-1代表倒数第二个字段。</p>
+<p>和sed类似，一般来说awk命令是这样构成的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk [参数] [脚本] [文件]</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="案例-2"><a href="#案例-2" class="headerlink" title="案例"></a>案例</h3><p>以“，”和“。”为分割符，每行逐句输出 长恨歌.md</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">awk -F &amp;#x27;[，。]&amp;#x27; &amp;#x27;&#123;<span class="keyword">for</span>(i=1; i 【唐代】白居易</span><br><span class="line">汉皇重色思倾国，御宇多年求不得。杨家有女初长成，养在深闺人未识。</span><br><span class="line">天生丽质难自弃，一朝选在君王侧。回眸一笑百媚生，六宫粉黛无颜色。</span><br><span class="line">春寒赐浴华清池，温泉水滑洗凝脂。侍儿扶起娇无力，始是新承恩泽时。</span><br><span class="line">云鬓花颜金步摇，芙蓉帐暖度春宵。春宵苦短日高起，从此君王不早朝。</span><br><span class="line">承欢侍宴无闲暇，春从春游夜专夜。后宫佳丽三千人，三千宠爱在一身。</span><br><span class="line">金屋妆成娇侍夜，玉楼宴罢醉和春。姊妹弟兄皆列土，可怜光彩生门户。</span><br><span class="line">遂令天下父母心，不重生男重生女。骊宫高处入青云，仙乐风飘处处闻。</span><br><span class="line">缓歌慢舞凝丝竹，尽日君王看不足。渔阳鼙鼓动地来，惊破霓裳羽衣曲。</span><br><span class="line">九重城阙烟尘生，千乘万骑西南行。翠华摇摇行复止，西出都门百余里。</span><br><span class="line">六军不发无奈何，宛转蛾眉马前死。花钿委地无人收，翠翘金雀玉搔头。</span><br><span class="line">君王掩面救不得，回看血泪相和流。黄埃散漫风萧索，云栈萦纡登剑阁。</span><br><span class="line">峨嵋山下少人行，旌旗无光日色薄。蜀江水碧蜀山青，圣主朝朝暮暮情。</span><br><span class="line">行宫见月伤心色，夜雨闻铃肠断声。天旋地转回龙驭，到此踌躇不能去。</span><br><span class="line">马嵬坡下泥土中，不见玉颜空死处。君臣相顾尽沾衣，东望都门信马归。</span><br><span class="line">归来池苑皆依旧，太液芙蓉未央柳。芙蓉如面柳如眉，对此如何不泪垂。</span><br><span class="line">春风桃李花开日，秋雨梧桐叶落时。西宫南内多秋草，落叶满阶红不扫。</span><br><span class="line">梨园弟子白发新，椒房阿监青娥老。夕殿萤飞思悄然，孤灯挑尽未成眠。</span><br><span class="line">迟迟钟鼓初长夜，耿耿星河欲曙天。鸳鸯瓦冷霜华重，翡翠衾寒谁与共。</span><br><span class="line">悠悠生死别经年，魂魄不曾来入梦。临邛道士鸿都客，能以精诚致魂魄。</span><br><span class="line">为感君王辗转思，遂教方士殷勤觅。排空驭气奔如电，升天入地求之遍。</span><br><span class="line">上穷碧落下黄泉，两处茫茫皆不见。忽闻海上有仙山，山在虚无缥渺间。</span><br><span class="line">楼阁玲珑五云起，其中绰约多仙子。中有一人字太真，雪肤花貌参差是。</span><br><span class="line">金阙西厢叩玉扃，转教小玉报双成。闻道汉家天子使，九华帐里梦魂惊。</span><br><span class="line">揽衣推枕起徘徊，珠箔银屏迤逦开。云鬓半偏新睡觉，花冠不整下堂来。</span><br><span class="line">风吹仙袂飘飖举，犹似霓裳羽衣舞。玉容寂寞泪阑干，梨花一枝春带雨。</span><br><span class="line">含情凝睇谢君王，一别音容两渺茫。昭阳殿里恩爱绝，蓬莱宫中日月长。</span><br><span class="line">回头下望人寰处，不见长安见尘雾。惟将旧物表深情，钿合金钗寄将去。</span><br><span class="line">钗留一股合一扇，钗擘黄金合分钿。但教心似金钿坚，天上人间会相见。</span><br><span class="line">临别殷勤重寄词，词中有誓两心知。七月七日长生殿，夜半无人私语时。</span><br><span class="line">在天愿作比翼鸟，在地愿为连理枝。天长地久有时尽，此恨绵绵无绝期。</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://kide-lee.github.io">之于言者</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://kide-lee.github.io/2023/10/22/grep-sed-awk/">https://kide-lee.github.io/2023/10/22/grep-sed-awk/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://kide-lee.github.io" target="_blank">之于言者</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/linux/">linux</a></div><div class="post-share"><div class="social-share" data-image="/img/logo.svg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/11/20/ONI-CH4-spring-development/" title="缺氧：天然气泉开发"><img class="cover" src="/data/ONI-CH4-spring/%E6%99%AE%E9%80%9A%E8%A7%86%E5%9B%BE.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">缺氧：天然气泉开发</div></div><div class="info-2"><div class="info-item-1">前言最近笔者在重温《缺氧》的时候，遇到开发天然气泉的问题。这个档本计划完全引用 大叔追云彩 的语雀文档的，但他那个滴液换气的开发方案我不是很喜欢。这时我想到我以前做过另一个推气门的思路。但我的电脑经过系统重装后，原稿早已散佚；幸而，去之前水过的群聊天记录里翻到当时的设计稿。模块建好后，笔者痛定思痛，惩前毖后，决定将这个模块记在这里，权当备忘。 概览 这个模块是别人设计的，我做的改进是想办法在产气室里也塞了一个气压传感器，它和周期传感器并联在一个与门上，由此共同控制机械闸门的开合。这样做的好处是在喷泉休眠后模块就会停止推气，不会出现对着真空无谓地工作，算是节约了电脑的运算资源。要是产气室中的气压传感器的值设得再大一点，喷泉活跃期时两次喷发的间隙中也不会推气，极大减少了机械门开合的声音。 模块需要注意的地方在于气泵必须用钢来制造，由于没控温措施（发电机会吞热，没必要控温），气管也最好用隔热气体管道。 自动化设置方面，储气室里的气压传感器是为了避免气体抽尽而导致气泵过热；周期传感器可以设成 5s&#x2F;5s；然后控制产气室里的气压传感器，使模块常启，等到气泉喷发之后，记录此时产气室...</div></div></div></a><a class="pagination-related" href="/2023/09/15/%E4%B8%80%E7%A7%8D%E5%AF%B9mediawiki%E4%B8%AD%E6%A8%A1%E6%9D%BF%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%94%B9%E9%80%A0%E6%96%B9%E6%A1%88%EF%BC%88%E4%BA%8C%EF%BC%89/" title="一种对mediawiki中模板系统的改造方案（二）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">一种对mediawiki中模板系统的改造方案（二）</div></div><div class="info-2"><div class="info-item-1">前面主要谈到了对模板系统和解析器函数的改造。事实上在 MediaWiki 中，解析器函数是所谓“魔术字”的一部分。JavaScript 是种功能强大的编程语言，以下我们将会把魔术字的另两个功能“状态开关”和“系统变量”也都包装成 JS 的方法。 系统变量部分系统变量在同一页面上的可使用次数是有限的，这类系统变量会被标记为【高开销】。 下表中PAGE和USER系列的方法中可以接受一个参数，用以指定某个特定页面或用户，而非当前页面或用户。    SITE 描述 PAGE 描述 USER 描述    SITE.name() 站点的名字 PAGE.name() 当前页面的标题 USER.name() 当前用户名   SITE.lang() 站点默认界面语言 PAGE.lang() 当前页面选择的语言 USER.lang() 当前用户选择的语言   SITE.url() 站点的域名 PAGE.url() 当前页面的网址 USER.url() 当前用户的用户页网址   SITE.edits() 站点编辑次数 PAGE.edits() 当前页面的编辑次数 USER.edits() 当前用户的编...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/02/21/zabbix-install/" title="CentOS Stream 9 中 Zabbix 的安装"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-02-21</div><div class="info-item-2">CentOS Stream 9 中 Zabbix 的安装</div></div><div class="info-2"><div class="info-item-1"> 查看系统版本&#96;&#96;&#96;bashcat &#x2F;etc&#x2F;os-release  1232. 根据提示禁用EPEL源，启用Zabbix源```bashrpm -Uvh https://repo.zabbix.com/zabbix/6.0/rhel/9/x86_64/zabbix-release-6.0-4.el9.noarch.rpmdnf clean all  安装Zabbix server，Web前端，agent&#96;&#96;&#96;bashdnf install zabbix-server-mysql zabbix-web-mysql zabbix-nginx-conf zabbix-sql-scripts zabbix-selinux-policy zabbix-agent  12345674. 安装MySQL```bashyum -y remove mysqlfind / -name mysqlrpm -ivh https://dev.mysql.com/get/mysql80-community-release-el8-1.no...</div></div></div></a><a class="pagination-related" href="/2024/03/25/bash-hello/" title="Shell 语法速查"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-25</div><div class="info-item-2">Shell 语法速查</div></div><div class="info-2"><div class="info-item-1">数据类型   类型 示例 备注    字符串 “string” 在shell中大部分数据都属于字符串   数组 (a b c d) 关于shell中数组的详细用法，可参见之前写过的这篇文章   整数 “12” shell会在计算中对字符串隐式转换成数字   运算在 Shell 脚本中进行运算有几种方法： 使用expr命令比如： 1234a=1b=2sum=$(expr $a + $b)echo &quot;a + b = $sum&quot;   值得注意的是，由于expr是命令，因此每个变量以及运算符之间需要以空格分割；乘号（*）需要经过转义 使用$((式子))比如： 1234a=1b=2sum=$((a + b))echo &quot;a + b = $sum&quot;   看起来比expr命令灵活一些，不用担心乘号被bash误解，也不用关心空格。但这种shell只支持整数类型，当计算出现小数时会向下取整。 还有一种$[式子]的语法也是类似的样子，但其已在bash2.0废弃，不推荐使用。 语句条件分支关于条件分支的其他细节，可参见这篇文章 12345678read -rep...</div></div></div></a><a class="pagination-related" href="/2023/08/17/%E5%9C%A8ubuntu%E4%B8%AD%E5%8D%8A%E8%87%AA%E5%8A%A8%E5%AE%89%E8%A3%85%E6%90%9C%E7%8B%97%E8%BE%93%E5%85%A5%E6%B3%95%E7%9A%84shell%E8%84%9A%E6%9C%AC/" title="在ubuntu中半自动安装搜狗输入法的shell脚本"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-17</div><div class="info-item-2">在ubuntu中半自动安装搜狗输入法的shell脚本</div></div><div class="info-2"><div class="info-item-1">总而言之就是用脚本实现了一遍搜狗官网教程中的内容，脚本仅仅在虚拟机环境的 ubuntu 22 中对 sogoupinyin_4.2.1.145_amd64.deb 测试过，不保证在其他地方还能不能正常运行。 脚本启动需要用sudo命令以管理员权限执行，脚本执行完毕并重启电脑后，按Ctrl+空格键调出输入法，按Shift键切换中英文。 12345678910111213141516171819202122232425262728293031323334353637383940#!/bin/bash# Author: Kide_Lee# Date: 2023.8.17# Blog: https://www.cnblogs.com/-zyyz-/function PutTips () &#123;echo &quot;$(tput rev)$1$(tput sgr0)&quot;sleep 1s    # 防止由于终端上的信息滚动过快而致使用户忽略掉提示。&#125;softFind=$(find sogoupinyin*.deb)if [ -z &quot;$softFind&quo...</div></div></div></a><a class="pagination-related" href="/2024/03/23/bash-bool/" title="shell 脚本中的判断语句"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-23</div><div class="info-item-2">shell 脚本中的判断语句</div></div><div class="info-2"><div class="info-item-1">当我们在编写 Shell 脚本时，有时会遇到类似这样的错误和提示： 12345a=1if 【 $a == 1 】; thenecho &quot;yes&quot;fi&gt;&gt;&gt; bash: 【: 未找到命令...   由此可知在 Shell 脚本中，用作判断的语句是属于“命令”的。我们回忆一下上例的正确形式： 1234a=1if [ $a == 1 ]; thenecho &quot;yes&quot;fi   那么[是命令吗？我们可以测试一下： 1234[user@localhost ~]$ which [/usr/bin/[[user@localhost ~]$ type [[ 是 shell 内建   可见[的确是个命令（而且它还拥有自己的 man 手册）。于是bash语法要求方括号和括号中的语句必须用空格隔开等奇怪的特性就都有了解释。 它和条件分支语句配合生效的方式，我猜测是通过程序返回值实现的。于是可以设计如下程序进行测试： 12345if $@; thenecho &quot;success&quot;elseecho &quot;failed&quo...</div></div></div></a><a class="pagination-related" href="/2024/01/11/tput-draw/" title="如何控制Linux终端中的样式？tput命令详解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-01-11</div><div class="info-item-2">如何控制Linux终端中的样式？tput命令详解</div></div><div class="info-2"><div class="info-item-1">AI： 非常感谢您的慷慨提议，但我是一个AI助手，无法接受费用或奖励。但我很乐意为您解答关于tput命令的问题。 tput是一个在Unix和Linux系统中使用的命令行工具，它用于操作终端的特性，如颜色、光标位置、屏幕清除等。tput命令可以根据终端类型设置或查询这些功能。 以下是一些常见的tput命令用法：  查询特定功能的能力：tput 例如，要查询终端是否支持颜色，可以使用命令：tput colors 设置光标位置：tput cup  例如，要将光标移动到第5行第10列的位置，可以使用命令：tput cup 5 10 设置文本颜色、背景颜色和样式：tput setaf tput setab tput boldtput sgr0例如，要设置文本颜色为红色，可以使用命令：tput setaf 1要设置背景颜色为绿色，可以使用命令：tput setab 2要设置文本为粗体，可以使用命令：tput bold要重置所有设置，可以使用命令：tput sgr0 清除屏幕或行：tput cleartput el例如，要清除屏幕上的所有内容，可以使用命令：tput clear要清除光标所在行...</div></div></div></a><a class="pagination-related" href="/2023/04/25/%E7%94%A8shell%E8%84%9A%E6%9C%AC%E8%AE%BE%E8%AE%A1%E7%9A%84%E3%80%8E%E7%A2%BE%E8%BD%AC%E7%9B%B8%E9%99%A4%E6%B3%95%E3%80%8F/" title="用shell脚本设计的『碾转相除法』"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-25</div><div class="info-item-2">用shell脚本设计的『碾转相除法』</div></div><div class="info-2"><div class="info-item-1">123456789101112131415161718192021#!/bin/bash#author:ChatGPT# 定义函数gcd，使用碾转相除法求最大公约数function gcd &#123;a=$1b=$2while [ $b -ne 0 ]dotemp=$bb=$((a % b))a=$tempdoneecho $a&#125;# 读取用户输入的两个数echo &quot;请输入两个整数：&quot;read num1 num2# 调用函数gcd求最大公约数result=$(gcd $num1 $num2)# 输出结果echo &quot;最大公约数为：$result&quot;</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/logo.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">之于言者</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/kide-lee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/319250988" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #FB7299;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/wang-yan-62-4-38" target="_blank" title="Zhihu"><i class="fab fa-zhihu" style="color: #0066FF;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E8%80%8C%E8%A8%80%E4%B9%8B"><span class="toc-number">1.</span> <span class="toc-text">总而言之</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E-grep"><span class="toc-number">2.</span> <span class="toc-text">关于 grep</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B"><span class="toc-number">2.1.</span> <span class="toc-text">案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E-sed"><span class="toc-number">3.</span> <span class="toc-text">关于 sed</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B-1"><span class="toc-number">3.1.</span> <span class="toc-text">案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%95%BF%E6%81%A8%E6%AD%8C-%E3%80%90%E5%94%90%E4%BB%A3%E3%80%91%E7%99%BD%E5%B1%85%E6%98%93%E6%B1%89%E7%9A%87%E9%87%8D%E8%89%B2%E6%80%9D%E5%80%BE%E5%9B%BD%EF%BC%8C%E5%BE%A1%E5%AE%87%E5%A4%9A%E5%B9%B4%E6%B1%82%E4%B8%8D%E5%BE%97%E3%80%82%E6%9D%A8%E5%AE%B6%E6%9C%89%E5%A5%B3%E5%88%9D%E9%95%BF%E6%88%90%EF%BC%8C%E5%85%BB%E5%9C%A8%E6%B7%B1%E9%97%BA%E4%BA%BA%E6%9C%AA%E8%AF%86%E3%80%82%E5%A4%A9%E7%94%9F%E4%B8%BD%E8%B4%A8%E9%9A%BE%E8%87%AA%E5%BC%83%EF%BC%8C%E4%B8%80%E6%9C%9D%E9%80%89%E5%9C%A8%E5%90%9B%E7%8E%8B%E4%BE%A7%E3%80%82%E5%9B%9E%E7%9C%B8%E4%B8%80%E7%AC%91%E7%99%BE%E5%AA%9A%E7%94%9F%EF%BC%8C%E5%85%AD%E5%AE%AB%E7%B2%89%E9%BB%9B%E6%97%A0%E9%A2%9C%E8%89%B2%E3%80%82"><span class="toc-number">3.2.</span> <span class="toc-text">长恨歌&gt; 【唐代】白居易汉皇重色思倾国，御宇多年求不得。杨家有女初长成，养在深闺人未识。天生丽质难自弃，一朝选在君王侧。回眸一笑百媚生，六宫粉黛无颜色。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E-awk"><span class="toc-number">4.</span> <span class="toc-text">关于 awk</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B-2"><span class="toc-number">4.1.</span> <span class="toc-text">案例</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/25/bash-hello/" title="Shell 语法速查">Shell 语法速查</a><time datetime="2024-03-25T10:18:51.000Z" title="发表于 2024-03-25 18:18:51">2024-03-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/23/bash-bool/" title="shell 脚本中的判断语句">shell 脚本中的判断语句</a><time datetime="2024-03-22T19:35:58.000Z" title="发表于 2024-03-23 03:35:58">2024-03-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/13/Csharp-mine/" title="命令行扫雷重制版堂堂登场！">命令行扫雷重制版堂堂登场！</a><time datetime="2024-03-12T17:01:16.000Z" title="发表于 2024-03-13 01:01:16">2024-03-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/26/Csharp-exercises-2/" title="C#习题若干-其二">C#习题若干-其二</a><time datetime="2024-02-26T08:00:03.000Z" title="发表于 2024-02-26 16:00:03">2024-02-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/24/Csharp-exercises/" title="C#习题若干">C#习题若干</a><time datetime="2024-02-23T17:11:44.000Z" title="发表于 2024-02-24 01:11:44">2024-02-24</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2023 - 2026 By 之于言者</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.6.1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.6.1"></script><script src="/js/main.js?v=5.6.1"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([data-fancybox])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      if (!item.parentNode) return
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || ''
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    const responseURL = e.request && e.request.responseURL
+    if (e.request && e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : responseURL && (window.location.href = responseURL)
+    } else if (responseURL) {
+      window.location.href = responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

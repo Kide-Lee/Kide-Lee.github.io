@@ -1,0 +1,301 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>用JavaScript求1000以内的质数 | 之于言者</title><meta name="author" content="之于言者"><meta name="copyright" content="之于言者"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1234567891011121314var primes &#x3D; [2]; &#x2F;&#x2F; 2是质数，先将其加入质数数组中for (var i &#x3D; 3; i &lt;&#x3D; 1000; i++) &#123;var isPrime &#x3D; true; &#x2F;&#x2F; 假设i是质数for (var j &#x3D; 0; j &lt; primes.length &amp;&amp; primes[j] &lt;&#x3D; Math.sqrt(i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用JavaScript求1000以内的质数">
+<meta property="og:url" content="https://kide-lee.github.io/2023/05/27/%E7%94%A8JavaScript%E6%B1%821000%E4%BB%A5%E5%86%85%E7%9A%84%E8%B4%A8%E6%95%B0/index.html">
+<meta property="og:site_name" content="之于言者">
+<meta property="og:description" content="1234567891011121314var primes &#x3D; [2]; &#x2F;&#x2F; 2是质数，先将其加入质数数组中for (var i &#x3D; 3; i &lt;&#x3D; 1000; i++) &#123;var isPrime &#x3D; true; &#x2F;&#x2F; 假设i是质数for (var j &#x3D; 0; j &lt; primes.length &amp;&amp; primes[j] &lt;&#x3D; Math.sqrt(i">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kide-lee.github.io/img/logo.svg">
+<meta property="article:published_time" content="2023-05-27T05:04:01.000Z">
+<meta property="article:modified_time" content="2023-05-26T18:12:33.000Z">
+<meta property="article:author" content="之于言者">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="旧档迁移">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kide-lee.github.io/img/logo.svg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "用JavaScript求1000以内的质数",
+  "url": "https://kide-lee.github.io/2023/05/27/%E7%94%A8JavaScript%E6%B1%821000%E4%BB%A5%E5%86%85%E7%9A%84%E8%B4%A8%E6%95%B0/",
+  "image": "https://kide-lee.github.io/img/logo.svg",
+  "datePublished": "2023-05-27T05:04:01.000Z",
+  "dateModified": "2023-05-26T18:12:33.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "之于言者",
+      "url": "https://kide-lee.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/logo.svg"><link rel="canonical" href="https://kide-lee.github.io/2023/05/27/%E7%94%A8JavaScript%E6%B1%821000%E4%BB%A5%E5%86%85%E7%9A%84%E8%B4%A8%E6%95%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.6.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '用JavaScript求1000以内的质数',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/logo.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%8A%80%E6%9C%AF/"><i class="fa-fw fas fa-code"></i><span> 技术</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%B8%B8%E6%88%8F/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E7%A7%91%E5%AD%A6/"><i class="fa-fw fas fa-flask"></i><span> 科学</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E8%99%9A%E6%9E%84/"><i class="fa-fw fas fa-book"></i><span> 虚构</span></a></div><div class="menus_item"><a class="site-page" href="/categories/wiki/"><i class="fa-fw fab fa-wikipedia-w"></i><span> 维基项目</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/top_img.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/logo.svg" alt="Logo"><span class="site-name">之于言者</span></a><a class="nav-page-title" href="/"><span class="site-name">用JavaScript求1000以内的质数</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%8A%80%E6%9C%AF/"><i class="fa-fw fas fa-code"></i><span> 技术</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%B8%B8%E6%88%8F/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E7%A7%91%E5%AD%A6/"><i class="fa-fw fas fa-flask"></i><span> 科学</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E8%99%9A%E6%9E%84/"><i class="fa-fw fas fa-book"></i><span> 虚构</span></a></div><div class="menus_item"><a class="site-page" href="/categories/wiki/"><i class="fa-fw fab fa-wikipedia-w"></i><span> 维基项目</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">用JavaScript求1000以内的质数</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-27T05:04:01.000Z" title="发表于 2023-05-27 13:04:01">2023-05-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-26T18:12:33.000Z" title="更新于 2023-05-27 02:12:33">2023-05-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> primes = [<span class="number">2</span>]; <span class="comment">// 2是质数，先将其加入质数数组中</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">3</span>; i &lt;= <span class="number">1000</span>; i++) &#123;</span><br><span class="line"><span class="keyword">var</span> isPrime = <span class="literal">true</span>; <span class="comment">// 假设i是质数</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; primes.<span class="property">length</span> &amp;&amp; primes[j] &lt;= <span class="title class_">Math</span>.<span class="title function_">sqrt</span>(i); j++) &#123;</span><br><span class="line"><span class="keyword">if</span> (i % primes[j] === <span class="number">0</span>) &#123;</span><br><span class="line">isPrime = <span class="literal">false</span>; <span class="comment">// 如果i可以被某个质数整除，则说明i不是质数</span></span><br><span class="line"><span class="keyword">break</span>; <span class="comment">// 跳出循环</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (isPrime) &#123;</span><br><span class="line">primes.<span class="title function_">push</span>(i); <span class="comment">// 将i加入质数数组中</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(i); <span class="comment">// 输出质数</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>代码原理：</p>
+<ul>
+<li>检查某个数与比它小的所有质数取余后是否为0，若不是，则加入质数表，然后检查下一个数。</li>
+</ul>
+<p>涉及到的知识点：</p>
+<ol>
+<li>数组</li>
+</ol>
+<ul>
+<li><p>创建：<code>group = []</code></p>
+</li>
+<li><p>形式：<code>[num1, num2, num3]</code></p>
+</li>
+<li><p>追加：<code>group.push[num4]</code></p>
+</li>
+<li><p>长度：<code>group.lenth == 4</code></p>
+</li>
+<li><p>提取：<code>group[2] == num3</code></p>
+</li>
+</ul>
+<ol start="2">
+<li>函数</li>
+</ol>
+<ul>
+<li>求平方根：<code>Math.sqrt(25) == 5</code></li>
+</ul>
+<ol start="3">
+<li>循环</li>
+</ol>
+<ul>
+<li><p>for循环：<code>for(起始值; 循环条件; 循环节) {循环内容}</code></p>
+</li>
+<li><p>跳出循环：<code>break</code></p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://kide-lee.github.io">之于言者</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://kide-lee.github.io/2023/05/27/%E7%94%A8JavaScript%E6%B1%821000%E4%BB%A5%E5%86%85%E7%9A%84%E8%B4%A8%E6%95%B0/">https://kide-lee.github.io/2023/05/27/%E7%94%A8JavaScript%E6%B1%821000%E4%BB%A5%E5%86%85%E7%9A%84%E8%B4%A8%E6%95%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://kide-lee.github.io" target="_blank">之于言者</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%97%A7%E6%A1%A3%E8%BF%81%E7%A7%BB/">旧档迁移</a><a class="post-meta__tags" href="/tags/JavaScript/">JavaScript</a></div><div class="post-share"><div class="social-share" data-image="/img/logo.svg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/06/05/%E7%94%A8JavaScript%E7%BB%98%E5%88%B6%E3%80%8E%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92%E3%80%8F%E7%9A%84%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95/" title="用JavaScript绘制『杨辉三角』的一种方法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">用JavaScript绘制『杨辉三角』的一种方法</div></div><div class="info-2"><div class="info-item-1">12345678910111213function 杨辉三角(row_s) &#123;var zero = [0]                                                  //zero为常量var arr = [1]                                                   //初始化第一行for (var j = 0; j &lt; row_s; j++) &#123;document.write(&quot;&quot;+arr.join(&quot; &quot;)+&quot;&quot;)  //打印第一行var arr_x = zero.concat(arr)var arr_y = arr.concat(zero)                                //使第一行分别前后加零形成两个新数组for (var i = 0; i &lt; arr_x.length; i++) &#123;                    //使新数组各项相加，为第二行arr...</div></div></div></a><a class="pagination-related" href="/2023/05/18/JavaScript%E4%B8%AD%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E5%8C%96/" title="JavaScript中变量类型间的转化"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">JavaScript中变量类型间的转化</div></div><div class="info-2"><div class="info-item-1">   转到 数值 字符串 布尔 null undefined    数值  Number()parsenInt()-0,&#x2F;1,*1 Number(true)→1Number(false)→0 Number(null)→0 Number(undefind)→NaN   字符串 String()toString()+””  String(true)→trueString(false)→false Error: null.toString() Error: undefined.toString()   布尔 Boolean(0)→falseBoolean(NaN)→true Boolean(“”)→falseBoolean(“Str”)→true  Boolean(null)→0 Boolean(undefined)→0   </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2023/05/18/JavaScript%E4%B8%AD%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E5%8C%96/" title="JavaScript中变量类型间的转化"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-18</div><div class="info-item-2">JavaScript中变量类型间的转化</div></div><div class="info-2"><div class="info-item-1">   转到 数值 字符串 布尔 null undefined    数值  Number()parsenInt()-0,&#x2F;1,*1 Number(true)→1Number(false)→0 Number(null)→0 Number(undefind)→NaN   字符串 String()toString()+””  String(true)→trueString(false)→false Error: null.toString() Error: undefined.toString()   布尔 Boolean(0)→falseBoolean(NaN)→true Boolean(“”)→falseBoolean(“Str”)→true  Boolean(null)→0 Boolean(undefined)→0   </div></div></div></a><a class="pagination-related" href="/2023/06/15/%E7%94%A8JavaScript%E7%BB%98%E5%88%B6%E6%A0%91%E7%8A%B6%E5%9B%BE%EF%BC%88%E5%85%B7%E6%9C%89%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6%E5%8A%9F%E8%83%BD%EF%BC%89%E7%9A%84%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%88%E5%85%B6%E4%B8%80%EF%BC%89/" title="用JavaScript绘制树状图（具有分支合并功能）的一种方法（其一）"><img class="cover" src="/data/js-tree-1/10002.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-06-15</div><div class="info-item-2">用JavaScript绘制树状图（具有分支合并功能）的一种方法（其一）</div></div><div class="info-2"><div class="info-item-1">需求分析在很多模拟经营游戏中，科技树是一项重要的内容，其为玩家提供了各项技术与其前后置科技间的拓扑关系。这些科技树在表现形式上和普通树状图很相似，但由于其频繁的分支合并，为科技树的绘制带来困难。因此，我们需要一种简单的方法来绘制科技树。 比如，当用户输入： 123456789101112131415161718192021&lt;!--为了降低用户的学习门槛，这里的语法参考了wikitext的无序列表--&gt;*四年计划**西墙防线***大西洋壁垒***东方壁垒**大空间经济***亲近罗马尼亚****整合战时经济***亲近匈牙利****整合战时经济*****组建专员辖区**自给自足***帝国高速公路****德国战时经济*****组建专员辖区***煤液化****合成橡胶*****增加科研槽***赫尔曼·戈林工厂****力量来自欢乐牌汽车*****增加科研槽   我们期望，输出的样式可以类似于这样：  通过以上构想不难发现，从输入到输出大致要经过这几个步骤： 可以看到，上面的步骤中需要将树状图渲染两次，这势必会增加我们工作的难度，为此我们可以将第2、3步调换，再略作调整，最终得到这...</div></div></div></a><a class="pagination-related" href="/2023/06/05/%E7%94%A8JavaScript%E7%BB%98%E5%88%B6%E3%80%8E%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92%E3%80%8F%E7%9A%84%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95/" title="用JavaScript绘制『杨辉三角』的一种方法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-06-05</div><div class="info-item-2">用JavaScript绘制『杨辉三角』的一种方法</div></div><div class="info-2"><div class="info-item-1">12345678910111213function 杨辉三角(row_s) &#123;var zero = [0]                                                  //zero为常量var arr = [1]                                                   //初始化第一行for (var j = 0; j &lt; row_s; j++) &#123;document.write(&quot;&quot;+arr.join(&quot; &quot;)+&quot;&quot;)  //打印第一行var arr_x = zero.concat(arr)var arr_y = arr.concat(zero)                                //使第一行分别前后加零形成两个新数组for (var i = 0; i &lt; arr_x.length; i++) &#123;                    //使新数组各项相加，为第二行arr...</div></div></div></a><a class="pagination-related" href="/2023/08/17/%E5%9C%A8ubuntu%E4%B8%AD%E5%8D%8A%E8%87%AA%E5%8A%A8%E5%AE%89%E8%A3%85%E6%90%9C%E7%8B%97%E8%BE%93%E5%85%A5%E6%B3%95%E7%9A%84shell%E8%84%9A%E6%9C%AC/" title="在ubuntu中半自动安装搜狗输入法的shell脚本"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-17</div><div class="info-item-2">在ubuntu中半自动安装搜狗输入法的shell脚本</div></div><div class="info-2"><div class="info-item-1">总而言之就是用脚本实现了一遍搜狗官网教程中的内容，脚本仅仅在虚拟机环境的 ubuntu 22 中对 sogoupinyin_4.2.1.145_amd64.deb 测试过，不保证在其他地方还能不能正常运行。 脚本启动需要用sudo命令以管理员权限执行，脚本执行完毕并重启电脑后，按Ctrl+空格键调出输入法，按Shift键切换中英文。 12345678910111213141516171819202122232425262728293031323334353637383940#!/bin/bash# Author: Kide_Lee# Date: 2023.8.17# Blog: https://www.cnblogs.com/-zyyz-/function PutTips () &#123;echo &quot;$(tput rev)$1$(tput sgr0)&quot;sleep 1s    # 防止由于终端上的信息滚动过快而致使用户忽略掉提示。&#125;softFind=$(find sogoupinyin*.deb)if [ -z &quot;$softFind&quo...</div></div></div></a><a class="pagination-related" href="/2023/05/10/%E5%A6%82%E4%BD%95%E5%B0%86%E7%BD%91%E9%A1%B5%E4%B8%AD%E7%9A%84%E7%9B%AE%E5%BD%95%E5%AE%8C%E7%BE%8E%E5%9C%B0%E6%B5%AE%E5%8A%A8%E5%9C%A8%E4%B8%BB%E8%A6%81%E5%86%85%E5%AE%B9%E7%9A%84%E4%BE%A7%E8%BE%B9%E8%B7%9D%E4%B8%AD/" title="如何将网页中的目录完美地浮动在主要内容的侧边距中"><img class="cover" src="/data/web-toc-float-aside/10002.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-10</div><div class="info-item-2">如何将网页中的目录完美地浮动在主要内容的侧边距中</div></div><div class="info-2"><div class="info-item-1">诸安，我是之于言者。 去年我在编写戴森球计划wiki时遇到一个需求：  将文档流中的目录提取出来，使之固定在屏幕左侧。  简而言之，就是将这样的网页： 转化成这样的网页： 原来的网页源代码可以简写成这个样子： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950&lt;!DOCUMENT html&gt;:root&#123;--border--:1px solid rgba(5, 109, 232, 0.5);&#125;#content&#123;max-width:1080px;margin:24px auto;border:var(--border--);padding:24px;&#125;h1&#123;border-bottom:var(--border--);&#125;#toc&#123;border:var(--border--);max-width:20%;color: rgba(5, 109, 232, 0.5);&#125;#...</div></div></div></a><a class="pagination-related" href="/2023/07/19/shell%E4%B8%AD%E5%AF%B9%E6%95%B0%E7%BB%84%E7%9A%84%E6%93%8D%E4%BD%9C%E6%B1%87%E6%80%BB/" title="shell中对数组的操作汇总"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-19</div><div class="info-item-2">shell中对数组的操作汇总</div></div><div class="info-2"><div class="info-item-1">   方法 用例 备注    创建数组 &#96;&#96;&#96;bash    arr&#x3D;(val_1 val_2 val_3)     | 创建空数组 | ```bash arr_new=() ``` |  | | 访问数组 | ```bash arr=(val_1 val_2 val_3) echo &quot;${arr[0]}&quot; ``` | 数组的索引从“0”开始，在这个例子中，脚本会输出“val_1”。 | | 访问数组的长度 | ```bash arr=(val_1 val_2 val_3) echo &quot;${#arr[@]}&quot; ``` | 在这个例子中，脚本会输出“3”。 | | 遍历数组 | ```bash arr=(val_1 val_2 val_3) for item in &quot;${arr[@]}&quot;; do echo &quot;$item&quot; done ``` | 在这个例子中，脚本会依次输出：val_1 val_2 val_3 | | 添加元素 | ```bash arr=(val_1 v...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/logo.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">之于言者</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/kide-lee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/319250988" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #FB7299;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/wang-yan-62-4-38" target="_blank" title="Zhihu"><i class="fab fa-zhihu" style="color: #0066FF;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/25/bash-hello/" title="Shell 语法速查">Shell 语法速查</a><time datetime="2024-03-25T10:18:51.000Z" title="发表于 2024-03-25 18:18:51">2024-03-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/23/bash-bool/" title="shell 脚本中的判断语句">shell 脚本中的判断语句</a><time datetime="2024-03-22T19:35:58.000Z" title="发表于 2024-03-23 03:35:58">2024-03-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/13/Csharp-mine/" title="命令行扫雷重制版堂堂登场！">命令行扫雷重制版堂堂登场！</a><time datetime="2024-03-12T17:01:16.000Z" title="发表于 2024-03-13 01:01:16">2024-03-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/26/Csharp-exercises-2/" title="C#习题若干-其二">C#习题若干-其二</a><time datetime="2024-02-26T08:00:03.000Z" title="发表于 2024-02-26 16:00:03">2024-02-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/24/Csharp-exercises/" title="C#习题若干">C#习题若干</a><time datetime="2024-02-23T17:11:44.000Z" title="发表于 2024-02-24 01:11:44">2024-02-24</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2023 - 2026 By 之于言者</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.6.1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.6.1"></script><script src="/js/main.js?v=5.6.1"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([data-fancybox])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      if (!item.parentNode) return
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || ''
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    const responseURL = e.request && e.request.responseURL
+    if (e.request && e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : responseURL && (window.location.href = responseURL)
+    } else if (responseURL) {
+      window.location.href = responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

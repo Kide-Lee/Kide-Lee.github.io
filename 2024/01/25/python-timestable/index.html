@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Python乘法表 | 之于言者</title><meta name="author" content="之于言者"><meta name="copyright" content="之于言者"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="之前都是用 VScode 来完成一切工作的，今天在别人的建议下尝试了 Pycharm。于是写了一个乘法表来熟悉一下手感。 12345678910for i in range(9):for j in range(i + 1):result &#x3D; (i + 1) * (j + 1)if result &gt; 9:IFS &#x3D; &quot;  &quot;else:IFS &#x3D; &quot;   &amp;quot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python乘法表">
+<meta property="og:url" content="https://kide-lee.github.io/2024/01/25/python-timestable/index.html">
+<meta property="og:site_name" content="之于言者">
+<meta property="og:description" content="之前都是用 VScode 来完成一切工作的，今天在别人的建议下尝试了 Pycharm。于是写了一个乘法表来熟悉一下手感。 12345678910for i in range(9):for j in range(i + 1):result &#x3D; (i + 1) * (j + 1)if result &gt; 9:IFS &#x3D; &quot;  &quot;else:IFS &#x3D; &quot;   &amp;quot">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kide-lee.github.io/img/logo.svg">
+<meta property="article:published_time" content="2024-01-24T23:16:14.000Z">
+<meta property="article:modified_time" content="2024-01-24T17:24:48.000Z">
+<meta property="article:author" content="之于言者">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kide-lee.github.io/img/logo.svg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Python乘法表",
+  "url": "https://kide-lee.github.io/2024/01/25/python-timestable/",
+  "image": "https://kide-lee.github.io/img/logo.svg",
+  "datePublished": "2024-01-24T23:16:14.000Z",
+  "dateModified": "2024-01-24T17:24:48.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "之于言者",
+      "url": "https://kide-lee.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/logo.svg"><link rel="canonical" href="https://kide-lee.github.io/2024/01/25/python-timestable/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.6.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Python乘法表',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/logo.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%8A%80%E6%9C%AF/"><i class="fa-fw fas fa-code"></i><span> 技术</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%B8%B8%E6%88%8F/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E7%A7%91%E5%AD%A6/"><i class="fa-fw fas fa-flask"></i><span> 科学</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E8%99%9A%E6%9E%84/"><i class="fa-fw fas fa-book"></i><span> 虚构</span></a></div><div class="menus_item"><a class="site-page" href="/categories/wiki/"><i class="fa-fw fab fa-wikipedia-w"></i><span> 维基项目</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/top_img.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/logo.svg" alt="Logo"><span class="site-name">之于言者</span></a><a class="nav-page-title" href="/"><span class="site-name">Python乘法表</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%8A%80%E6%9C%AF/"><i class="fa-fw fas fa-code"></i><span> 技术</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E6%B8%B8%E6%88%8F/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E7%A7%91%E5%AD%A6/"><i class="fa-fw fas fa-flask"></i><span> 科学</span></a></div><div class="menus_item"><a class="site-page" href="/categories/%E8%99%9A%E6%9E%84/"><i class="fa-fw fas fa-book"></i><span> 虚构</span></a></div><div class="menus_item"><a class="site-page" href="/categories/wiki/"><i class="fa-fw fab fa-wikipedia-w"></i><span> 维基项目</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Python乘法表</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-01-24T23:16:14.000Z" title="发表于 2024-01-25 07:16:14">2024-01-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-01-24T17:24:48.000Z" title="更新于 2024-01-25 01:24:48">2024-01-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>之前都是用 VScode 来完成一切工作的，今天在别人的建议下尝试了 Pycharm。于是写了一个乘法表来熟悉一下手感。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i + <span class="number">1</span>):</span><br><span class="line">result = (i + <span class="number">1</span>) * (j + <span class="number">1</span>)</span><br><span class="line"><span class="keyword">if</span> result &gt; <span class="number">9</span>:</span><br><span class="line">IFS = <span class="string">&quot;  &quot;</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">IFS = <span class="string">&quot;   &quot;</span></span><br><span class="line"><span class="built_in">print</span>(j + <span class="number">1</span>, <span class="string">&quot;×&quot;</span>, i + <span class="number">1</span>, <span class="string">&quot;=&quot;</span>, result, end=IFS)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"><span class="built_in">print</span>()</span><br></pre></td></tr></table></figure>
+
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">D:\CodeBase\python-study\pythonProject\.venv\Scripts\python.exe D:\CodeBase\python-study\pythonProject\.venv\times-table.py</span><br><span class="line">1 × 1 = 1</span><br><span class="line">1 × 2 = 2   2 × 2 = 4</span><br><span class="line">1 × 3 = 3   2 × 3 = 6   3 × 3 = 9</span><br><span class="line">1 × 4 = 4   2 × 4 = 8   3 × 4 = 12  4 × 4 = 16</span><br><span class="line">1 × 5 = 5   2 × 5 = 10  3 × 5 = 15  4 × 5 = 20  5 × 5 = 25</span><br><span class="line">1 × 6 = 6   2 × 6 = 12  3 × 6 = 18  4 × 6 = 24  5 × 6 = 30  6 × 6 = 36</span><br><span class="line">1 × 7 = 7   2 × 7 = 14  3 × 7 = 21  4 × 7 = 28  5 × 7 = 35  6 × 7 = 42  7 × 7 = 49</span><br><span class="line">1 × 8 = 8   2 × 8 = 16  3 × 8 = 24  4 × 8 = 32  5 × 8 = 40  6 × 8 = 48  7 × 8 = 56  8 × 8 = 64</span><br><span class="line">1 × 9 = 9   2 × 9 = 18  3 × 9 = 27  4 × 9 = 36  5 × 9 = 45  6 × 9 = 54  7 × 9 = 63  8 × 9 = 72  9 × 9 = 81</span><br><span class="line">进程已结束，退出代码为 0</span><br></pre></td></tr></table></figure>
+
+
+<p>运行是成功的。于是我在以上代码的基础上稍作改进，让它可以输出中文的乘法表：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义一个元组（相当于被定义为常量的数组），用于储存中文数字字符</span></span><br><span class="line"><span class="comment"># 虽然在本例中用不到“零”但还是把它加了进去，这样元祖元素就和它对应的键值一致了</span></span><br><span class="line">zhNumList = (<span class="string">&quot;〇&quot;</span>, <span class="string">&quot;一&quot;</span>, <span class="string">&quot;二&quot;</span>, <span class="string">&quot;三&quot;</span>, <span class="string">&quot;四&quot;</span>, <span class="string">&quot;五&quot;</span>, <span class="string">&quot;六&quot;</span>, <span class="string">&quot;七&quot;</span>, <span class="string">&quot;八&quot;</span>, <span class="string">&quot;九&quot;</span>)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">TransIntoZhNum</span>(<span class="params">num</span>):</span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">转译阿拉伯数字和中文数字</span></span><br><span class="line"><span class="string">输入一个0~99的整数参数，返回相对应的中文数字</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">if</span> num &lt; <span class="number">10</span>:</span><br><span class="line">zhNum = zhNumList[num]</span><br><span class="line"><span class="keyword">elif</span> num%<span class="number">10</span> == <span class="number">0</span>:</span><br><span class="line">zhNum = zhNumList[num//<span class="number">10</span>] + <span class="string">&quot;十&quot;</span></span><br><span class="line"><span class="keyword">elif</span> num &gt;= <span class="number">10</span> <span class="keyword">and</span> num &lt; <span class="number">20</span>:</span><br><span class="line">zhNum = <span class="string">&quot;十&quot;</span> + zhNumList[num%<span class="number">10</span>]</span><br><span class="line"><span class="keyword">elif</span> num &gt;= <span class="number">20</span> <span class="keyword">and</span> num &lt; <span class="number">100</span>:</span><br><span class="line">zhNum = zhNumList[num//<span class="number">10</span>] + <span class="string">&quot;十&quot;</span> + zhNumList[num%<span class="number">10</span>]</span><br><span class="line"><span class="keyword">return</span> zhNum</span><br><span class="line"><span class="comment"># Python的迭代器 range(n) 的迭代范围是 [0, n)</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">num_2 = i + <span class="number">1</span></span><br><span class="line">zhNum_2 = TransIntoZhNum(num_2)</span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(num_2):</span><br><span class="line">num_1 = j + <span class="number">1</span></span><br><span class="line">zhNum_1 = TransIntoZhNum(num_1)</span><br><span class="line">product = num_1 * num_2</span><br><span class="line">zhNum_3 = TransIntoZhNum(product)</span><br><span class="line"><span class="keyword">if</span> product &lt; <span class="number">10</span>:</span><br><span class="line">equal = <span class="string">&quot;得&quot;</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">equal = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="comment"># 此处使用了全角空格来作为填充格式化乘法表</span></span><br><span class="line">sentence = <span class="string">&quot;&#123;:　&lt;6&#125;&quot;</span>.<span class="built_in">format</span>(zhNum_1+zhNum_2+equal+zhNum_3)</span><br><span class="line"><span class="built_in">print</span>(sentence, end=<span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"><span class="built_in">print</span>()</span><br></pre></td></tr></table></figure>
+
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">D:\CodeBase\python-study\pythonProject\.venv\Scripts\python.exe D:\CodeBase\python-study\pythonProject\.venv\times-table2.py</span><br><span class="line">一一得一</span><br><span class="line">一二得二　　二二得四</span><br><span class="line">一三得三　　二三得六　　三三得九</span><br><span class="line">一四得四　　二四得八　　三四十二　　四四十六</span><br><span class="line">一五得五　　二五一十　　三五十五　　四五二十　　五五二十五</span><br><span class="line">一六得六　　二六十二　　三六十八　　四六二十四　五六三十　　六六三十六</span><br><span class="line">一七得七　　二七十四　　三七二十一　四七二十八　五七三十五　六七四十二　七七四十九</span><br><span class="line">一八得八　　二八十六　　三八二十四　四八三十二　五八四十　　六八四十八　七八五十六　八八六十四</span><br><span class="line">一九得九　　二九十八　　三九二十七　四九三十六　五九四十五　六九五十四　七九六十三　八九七十二　九九八十一</span><br><span class="line">进程已结束，退出代码为 0</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://kide-lee.github.io">之于言者</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://kide-lee.github.io/2024/01/25/python-timestable/">https://kide-lee.github.io/2024/01/25/python-timestable/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://kide-lee.github.io" target="_blank">之于言者</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/python/">python</a></div><div class="post-share"><div class="social-share" data-image="/img/logo.svg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/02/14/python-hello/" title="Python语法速查"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Python语法速查</div></div><div class="info-2"><div class="info-item-1">数据类型类型列表   类型 示例 备注    整数（int） 1 经过测试（pycharm），整数最大是2**14284   浮点数（float） 1.0    布尔（bool） True 0、””、[]、()、{} 和 None 均可视为False   字符串（str） “文本”    列表（list） [a, b, c] 类似数组   元祖（tuple） (a, b, c) 类似不可变的数组   集合（set） {a, b, c}    字典（dict） {‘a’:1, ‘b’:2} 类似对象   类型转换   方法 参数 返回值 缺省 备注    int() 数字、整数组成的字符串 整数 0 当参数为整数时，可追加一个参数指定进制   float() 数字、数字组成的字符串 浮点数 0.0    str()  字符串 ‘’    repr() 对象 表达式字符串 Error    eval() 字符串 对象 Error 本方法可视为repr()逆运算的超集；另外，本方法将运行字符串中有效的表达式   chr() 整数 字符 Error 这里的“字符”指长度为 1 的字符串 ...</div></div></div></a><a class="pagination-related" href="/2024/01/11/tput-draw/" title="如何控制Linux终端中的样式？tput命令详解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">如何控制Linux终端中的样式？tput命令详解</div></div><div class="info-2"><div class="info-item-1">AI： 非常感谢您的慷慨提议，但我是一个AI助手，无法接受费用或奖励。但我很乐意为您解答关于tput命令的问题。 tput是一个在Unix和Linux系统中使用的命令行工具，它用于操作终端的特性，如颜色、光标位置、屏幕清除等。tput命令可以根据终端类型设置或查询这些功能。 以下是一些常见的tput命令用法：  查询特定功能的能力：tput 例如，要查询终端是否支持颜色，可以使用命令：tput colors 设置光标位置：tput cup  例如，要将光标移动到第5行第10列的位置，可以使用命令：tput cup 5 10 设置文本颜色、背景颜色和样式：tput setaf tput setab tput boldtput sgr0例如，要设置文本颜色为红色，可以使用命令：tput setaf 1要设置背景颜色为绿色，可以使用命令：tput setab 2要设置文本为粗体，可以使用命令：tput bold要重置所有设置，可以使用命令：tput sgr0 清除屏幕或行：tput cleartput el例如，要清除屏幕上的所有内容，可以使用命令：tput clear要清除光标所在行...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/02/14/python-hello/" title="Python语法速查"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-02-14</div><div class="info-item-2">Python语法速查</div></div><div class="info-2"><div class="info-item-1">数据类型类型列表   类型 示例 备注    整数（int） 1 经过测试（pycharm），整数最大是2**14284   浮点数（float） 1.0    布尔（bool） True 0、””、[]、()、{} 和 None 均可视为False   字符串（str） “文本”    列表（list） [a, b, c] 类似数组   元祖（tuple） (a, b, c) 类似不可变的数组   集合（set） {a, b, c}    字典（dict） {‘a’:1, ‘b’:2} 类似对象   类型转换   方法 参数 返回值 缺省 备注    int() 数字、整数组成的字符串 整数 0 当参数为整数时，可追加一个参数指定进制   float() 数字、数字组成的字符串 浮点数 0.0    str()  字符串 ‘’    repr() 对象 表达式字符串 Error    eval() 字符串 对象 Error 本方法可视为repr()逆运算的超集；另外，本方法将运行字符串中有效的表达式   chr() 整数 字符 Error 这里的“字符”指长度为 1 的字符串 ...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/logo.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">之于言者</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/kide-lee" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/319250988" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #FB7299;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/wang-yan-62-4-38" target="_blank" title="Zhihu"><i class="fab fa-zhihu" style="color: #0066FF;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/25/bash-hello/" title="Shell 语法速查">Shell 语法速查</a><time datetime="2024-03-25T10:18:51.000Z" title="发表于 2024-03-25 18:18:51">2024-03-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/23/bash-bool/" title="shell 脚本中的判断语句">shell 脚本中的判断语句</a><time datetime="2024-03-22T19:35:58.000Z" title="发表于 2024-03-23 03:35:58">2024-03-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/13/Csharp-mine/" title="命令行扫雷重制版堂堂登场！">命令行扫雷重制版堂堂登场！</a><time datetime="2024-03-12T17:01:16.000Z" title="发表于 2024-03-13 01:01:16">2024-03-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/26/Csharp-exercises-2/" title="C#习题若干-其二">C#习题若干-其二</a><time datetime="2024-02-26T08:00:03.000Z" title="发表于 2024-02-26 16:00:03">2024-02-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/02/24/Csharp-exercises/" title="C#习题若干">C#习题若干</a><time datetime="2024-02-23T17:11:44.000Z" title="发表于 2024-02-24 01:11:44">2024-02-24</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2023 - 2026 By 之于言者</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.6.1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.6.1"></script><script src="/js/main.js?v=5.6.1"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([data-fancybox])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      if (!item.parentNode) return
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || ''
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    const responseURL = e.request && e.request.responseURL
+    if (e.request && e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : responseURL && (window.location.href = responseURL)
+    } else if (responseURL) {
+      window.location.href = responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
